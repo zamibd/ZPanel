@@ -9,8 +9,7 @@ web/html
 main
 tmp
 .sync*
-*.tar.gz
-frontend/
+*.tar.gz 
 
 # local env files
 .env.local
