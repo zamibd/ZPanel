@@ -1,0 +1,117 @@
+name: Release S-UI
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/release.yml'
+      - 'frontend/**'
+      - '**.sh'
+      - '**.go'
+      - 'go.mod'
+      - 'go.sum'
+      - 's-ui.service'
+
+jobs:
+  build-linux:
+    strategy:
+      matrix:
+        platform:
+          - amd64
+          - arm64
+          - armv7
+          - armv6
+          - armv5
+          - 386
+          - s390x
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          cache: false
+          go-version-file: go.mod
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm install
+          npm run build
+          cd ..
+          mv frontend/dist web/html
+          rm -fr frontend
+
+      - name: Build s-ui
+        run: |
+          export CGO_ENABLED=1
+          export GOOS=linux
+          export GOARCH=${{ matrix.platform }}
+          # Use Bootlin prebuilt cross-toolchains (musl 1.2.5 in stable series)
+          case "${{ matrix.platform }}" in
+            amd64) BOOTLIN_ARCH="x86-64" ;;
+            arm64) BOOTLIN_ARCH="aarch64" ;;
+            armv7) BOOTLIN_ARCH="armv7-eabihf"; export GOARCH=arm GOARM=7 ;;
+            armv6) BOOTLIN_ARCH="armv6-eabihf"; export GOARCH=arm GOARM=6 ;;
+            armv5) BOOTLIN_ARCH="armv5-eabi"; export GOARCH=arm GOARM=5 ;;
+            386) BOOTLIN_ARCH="x86-i686" ;;
+            s390x) BOOTLIN_ARCH="s390x-z13" ;;
+          esac
+          echo "Resolving Bootlin musl toolchain for arch=$BOOTLIN_ARCH (platform=${{ matrix.platform }})"
+          TARBALL_BASE="https://toolchains.bootlin.com/downloads/releases/toolchains/$BOOTLIN_ARCH/tarballs/"
+          TARBALL_URL=$(curl -fsSL "$TARBALL_BASE" | grep -oE "${BOOTLIN_ARCH}--musl--stable-[^\"]+\\.tar\\.xz" | sort -r | head -n1)
+          [ -z "$TARBALL_URL" ] && { echo "Failed to locate Bootlin musl toolchain for arch=$BOOTLIN_ARCH" >&2; exit 1; }
+          echo "Downloading: $TARBALL_URL"
+          cd /tmp
+          curl -fL -sS -o "$(basename "$TARBALL_URL")" "$TARBALL_BASE/$TARBALL_URL"
+          tar -xf "$(basename "$TARBALL_URL")"
+          TOOLCHAIN_DIR=$(find . -maxdepth 1 -type d -name "${BOOTLIN_ARCH}--musl--stable-*" | head -n1)
+          export PATH="$(realpath "$TOOLCHAIN_DIR")/bin:$PATH"
+          export CC=$(realpath "$(find "$TOOLCHAIN_DIR/bin" -name '*-gcc.br_real' -type f -executable | head -n1)")
+          [ -z "$CC" ] && { echo "No gcc.br_real found in $TOOLCHAIN_DIR/bin" >&2; exit 1; }
+          cd -
+
+          ### Build s-ui
+          go build -ldflags="-w -s -linkmode external -extldflags '-static'" -tags "with_quic,with_grpc,with_utls,with_acme,with_gvisor" -o sui main.go
+          file sui
+          ldd sui || echo "Static binary confirmed"
+
+          mkdir s-ui
+          cp sui s-ui/
+          cp s-ui.service s-ui/
+          cp s-ui.sh s-ui/
+
+      - name: Package
+        run: tar -zcvf s-ui-linux-${{ matrix.platform }}.tar.gz s-ui
+
+      - name: Upload files to Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: s-ui-linux-${{ matrix.platform }}
+          path: ./s-ui-linux-${{ matrix.platform }}.tar.gz
+          retention-days: 30
+
+      - name: Upload to Release
+        uses: svenstaro/upload-release-action@v2
+        if: github.event_name == 'release' && github.event.action == 'published'
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          file: s-ui-linux-${{ matrix.platform }}.tar.gz
+          asset_name: s-ui-linux-${{ matrix.platform }}.tar.gz
+          prerelease: true
+          overwrite: true
