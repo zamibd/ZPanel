@@ -58,6 +58,11 @@ jobs:
           mv frontend/dist web/html
           rm -fr frontend
 
+      - name: Setup Go dependencies
+        run: |
+          go mod tidy
+          go mod download
+
       - name: Build s-ui
         shell: bash
         run: |
@@ -127,6 +132,11 @@ jobs:
           cd ..
           mv frontend/dist web/html
           rm -fr frontend
+
+      - name: Setup Go dependencies
+        run: |
+          go mod tidy
+          go mod download
 
       - name: Build s-ui for ARM64
         run: |

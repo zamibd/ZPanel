@@ -56,6 +56,11 @@ jobs:
           mv frontend/dist web/html
           rm -fr frontend
 
+      - name: Setup Go dependencies
+        run: |
+          go mod tidy
+          go mod download
+
       - name: Build s-ui
         run: |
           export CGO_ENABLED=1
