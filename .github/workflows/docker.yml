@@ -5,7 +5,7 @@ on:
 
 jobs:
   frontend-build:
-    runs-on: self-hosted
+    runs-on: localhost
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5.0.0
