@@ -16,6 +16,11 @@ on:
       - 'go.sum'
       - 's-ui.service'
 
+permissions:
+  contents: write
+  packages: write
+  actions: read
+
 jobs:
   build-linux:
     strategy:
@@ -102,12 +107,8 @@ jobs:
           retention-days: 30
 
       - name: Upload to Release
-        uses: svenstaro/upload-release-action@v2
         if: github.event_name == 'release' && github.event.action == 'published'
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref }}
-          file: s-ui-linux-${{ matrix.platform }}.tar.gz
-          asset_name: s-ui-linux-${{ matrix.platform }}.tar.gz
-          prerelease: true
-          overwrite: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ github.event.release.tag_name }} s-ui-linux-${{ matrix.platform }}.tar.gz --clobber

@@ -1,17 +1,10 @@
 # S-UI
-**An Advanced Web Panel • Built on SagerNet/Sing-Box**
+**An Advanced And Powerfull Web Panel • Built on Sing-Box**
 
 
 
-> **Disclaimer:** This project is only for personal learning and communication, please do not use it for illegal purposes, please do not use it in a production environment
-
-**If you think this project is helpful to you, you may wish to give a**:star2:
-
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/alireza7)
-
-<a href="https://nowpayments.io/donation/alireza7" target="_blank" rel="noreferrer noopener">
-   <img src="https://nowpayments.io/images/embeds/donation-button-white.svg" alt="Crypto donation button by NOWPayments">
-</a>
+> **Disclaimer:** This project is only for personal learning and communication, please do not use it for illegal purposes, please do not use it in a production environment  
+ 
 
 ## Quick Overview
 | Features                               |      Enable?       |
