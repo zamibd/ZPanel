@@ -381,7 +381,7 @@ show_enable_status() {
     fi
 }
 
-check_s-ui_status() {
+check_zpanel_status() {
     count=$(ps -ef | grep "sui" | grep -v "grep" | wc -l)
     if [[ count -ne 0 ]]; then
         return 0
@@ -390,8 +390,8 @@ check_s-ui_status() {
     fi
 }
 
-show_s-ui_status() {
-    check_s-ui_status
+show_zpanel_status() {
+    check_zpanel_status
     if [[ $? == 0 ]]; then
         echo -e "ZPanel state: ${green}Running${plain}"
     else

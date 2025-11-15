@@ -21,26 +21,19 @@
 ## Supported Platforms
 | Platform | Architecture | Status |
 |----------|--------------|---------|
-| Linux    | amd64, arm64, armv7, armv6, armv5, 386, s390x | ✅ Supported |
-| Windows  | amd64, 386, arm64 | ✅ Supported |
-| macOS    | amd64, arm64 | 🚧 Experimental |
-
+| Linux    | amd64, arm64 | ✅ Supported |
 ## Screenshots
 
 !["Main"](https://github.com/zamibd/ZPanel/blob/main/frontend/media/main.png)
-
-[Other UI Screenshots](https://github.com/zamibd/ZPanel/blob/main/frontend/screenshots.md)
-
-## API Documentation
-
-[API-Documentation Wiki](https://github.com/zamibd/ZPanel/wiki/API-Documentation)
-
+ 
+ 
 ## Default Installation Information
 - Panel Port: 2080
 - Panel Path: /app/
 - Subscription Port: 2081
 - Subscription Path: /sub/
-- User/Password: admin
+- User :    admin
+- Password: admin
 
 ## Install & Upgrade to Latest Version
 
@@ -49,38 +42,7 @@
 bash <(curl -Ls https://raw.githubusercontent.com/zamibd/ZPanel/main/install.sh)
 ```
 
-### Windows
-1. Download the latest Windows release from [GitHub Releases](https://github.com/zamibd/ZPanel/releases/latest)
-2. Extract the ZIP file
-3. Run `install-windows.bat` as Administrator
-4. Follow the installation wizard
-
-## Install legacy Version
-
-**Step 1:** To install your desired legacy version, add the version to the end of the installation command. e.g., ver `1.0.0`:
-
-```sh
-VERSION=1.0.0 && bash <(curl -Ls https://raw.githubusercontent.com/zamibd/ZPanel/$VERSION/install.sh) $VERSION
-```
-
-## Manual installation
-
-### Linux/macOS
-1. Get the latest version of ZPanel based on your OS/Architecture from GitHub: [https://github.com/zamibd/ZPanel/releases/latest](https://github.com/zamibd/ZPanel/releases/latest)
-2. **OPTIONAL** Get the latest version of `ZPanel.sh` [https://raw.githubusercontent.com/zamibd/ZPanel/main/ZPanel.sh](https://raw.githubusercontent.com/zamibd/ZPanel/master/ZPanel.sh)
-3. **OPTIONAL** Copy `ZPanel.sh` to /usr/bin/ and run `chmod +x /usr/bin/ZPanel`.
-4. Extract ZPanel tar.gz file to a directory of your choice and navigate to the directory where you extracted the tar.gz file.
-5. Copy *.service files to /etc/systemd/system/ and run `systemctl daemon-reload`.
-6. Enable autostart and start ZPanel service using `systemctl enable ZPanel --now`
-7. Start sing-box service using `systemctl enable sing-box --now`
-
-### Windows
-1. Get the latest Windows version from GitHub: [https://github.com/zamibd/ZPanel/releases/latest](https://github.com/zamibd/ZPanel/releases/latest)
-2. Download the appropriate Windows package (e.g., `ZPanel-windows-amd64.zip`)
-3. Extract the ZIP file to a directory of your choice
-4. Run `install-windows.bat` as Administrator
-5. Follow the installation wizard
-6. Access the panel at http://localhost:2080/app
+Follow the installation wizard
 
 ## Uninstall ZPanel
 
@@ -96,90 +58,7 @@ rm -fr /usr/local/ZPanel
 rm /usr/bin/ZPanel
 ```
 
-## Install using Docker
-
-<details>
-   <summary>Click for details</summary>
-
-### Usage
-
-**Step 1:** Install Docker
-
-```shell
-curl -fsSL https://get.docker.com | sh
-```
-
-**Step 2:** Install ZPanel
-
-> Docker compose method
-
-```shell
-mkdir ZPanel && cd ZPanel
-wget -q https://raw.githubusercontent.com/zamibd/ZPanel/main/docker-compose.yml
-docker compose up -d
-```
-
-> Use docker
-
-```shell
-mkdir ZPanel && cd ZPanel
-docker run -itd \
-    -p 2080:2080 -p 2081:2081 -p 443:443 -p 80:80 \
-    -v $PWD/db/:/app/db/ \
-    -v $PWD/cert/:/root/cert/ \
-    --name ZPanel --restart=unless-stopped \
-    imzami/ZPanel:latest
-```
-
-> Build your own image
-
-```shell
-git clone https://github.com/zamibd/ZPanel
-docker build -t ZPanel .
-```
-
-</details>
-
-## Manual run ( contribution )
-
-<details>
-   <summary>Click for details</summary>
-
-### Build and run whole project
-```shell
-./runSUI.sh
-```
-
-### Clone the repository
-```shell
-# clone repository
-git clone https://github.com/zamibd/ZPanel
-```
-
-
-### - Frontend
-
-Visit [ZPanel-frontend](https://github.com/zamibd/ZPanel-frontend) for frontend code
-
-### - Backend
-> Please build frontend once before!
-
-To build backend:
-```shell
-# remove old frontend compiled files
-rm -fr web/html/*
-# apply new frontend compiled files
-cp -R frontend/dist/ web/html/
-# build
-go build -o sui main.go
-```
-
-To run backend (from root folder of repository):
-```shell
-./sui
-```
-
-</details>
+ 
 
 ## Languages
 
@@ -189,9 +68,7 @@ To run backend (from root folder of repository):
 - Chinese (Simplified)
 - Chinese (Traditional)
 - Russian
-
-## Features
-
+ 
 - Supported protocols:
   - General:  Mixed, SOCKS, HTTP, HTTPS, Direct, Redirect, TProxy
   - V2Ray based: VLESS, VMess, Trojan, Shadowsocks
@@ -214,27 +91,10 @@ To run backend (from root folder of repository):
 
 | Variable       |                      Type                      | Default       |
 | -------------- | :--------------------------------------------: | :------------ |
-| SUI_LOG_LEVEL  | `"debug"` \| `"info"` \| `"warn"` \| `"error"` | `"info"`      |
-| SUI_DEBUG      |                   `boolean`                    | `false`       |
-| SUI_BIN_FOLDER |                    `string`                    | `"bin"`       |
-| SUI_DB_FOLDER  |                    `string`                    | `"db"`        |
+| ZPANEL_LOG_LEVEL  | `"debug"` \| `"info"` \| `"warn"` \| `"error"` | `"info"`      |
+| ZPANEL_DEBUG      |                   `boolean`                    | `false`       |
+| ZPANEL_BIN_FOLDER |                    `string`                    | `"bin"`       |
+| ZPANEL_DB_FOLDER  |                    `string`                    | `"db"`        |
 | SINGBOX_API    |                    `string`                    | -             |
-
-</details>
-
-## SSL Certificate
-
-<details>
-  <summary>Click for details</summary>
-
-### Certbot
-
-```bash
-snap install core; snap refresh core
-snap install --classic certbot
-ln -s /snap/bin/certbot /usr/bin/certbot
-
-certbot certonly --standalone --register-unsafely-without-email --non-interactive --agree-tos -d <Your Domain Name>
-```
 
 </details> 

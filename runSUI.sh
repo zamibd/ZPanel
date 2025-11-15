@@ -1,2 +1,2 @@
 ./build.sh
-SUI_DB_FOLDER="db" SUI_DEBUG=true ./sui
+ZPANEL_DB_FOLDER="db" ZPANEL_DEBUG=true ./zpanel
