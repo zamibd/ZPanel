@@ -29,9 +29,9 @@
  
 ## Default Installation Information
 - Panel Port: 2080
-- Panel Path: /app/
+- Panel Path: /admin/
 - Subscription Port: 2081
-- Subscription Path: /sub/
+- Subscription Path: /customer/
 - User :    admin
 - Password: admin
 
@@ -97,4 +97,4 @@ rm /usr/bin/ZPanel
 | ZPANEL_DB_FOLDER  |                    `string`                    | `"db"`        |
 | SINGBOX_API    |                    `string`                    | -             |
 
-</details> 
+</details>
