@@ -23,7 +23,7 @@ jobs:
         platform:
           - amd64
           - arm64
-    runs-on: self-runner
+    runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5.0.0
