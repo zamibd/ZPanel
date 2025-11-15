@@ -23,12 +23,7 @@ jobs:
         platform:
           - amd64
           - arm64
-          - armv7
-          - armv6
-          - armv5
-          - 386
-          - s390x
-    runs-on: ubuntu-latest
+    runs-on: localhost
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5.0.0
@@ -66,15 +61,11 @@ jobs:
           export CGO_ENABLED=1
           export GOOS=linux
           export GOARCH=${{ matrix.platform }}
-          # Use Bootlin prebuilt cross-toolchains (musl 1.2.5 in stable series)
+          # Use Bootlin prebuilt cross-toolchains (musl stable)
           case "${{ matrix.platform }}" in
             amd64) BOOTLIN_ARCH="x86-64" ;;
             arm64) BOOTLIN_ARCH="aarch64" ;;
-            armv7) BOOTLIN_ARCH="armv7-eabihf"; export GOARCH=arm GOARM=7 ;;
-            armv6) BOOTLIN_ARCH="armv6-eabihf"; export GOARCH=arm GOARM=6 ;;
-            armv5) BOOTLIN_ARCH="armv5-eabi"; export GOARCH=arm GOARM=5 ;;
-            386) BOOTLIN_ARCH="x86-i686" ;;
-            s390x) BOOTLIN_ARCH="s390x-z13" ;;
+            *) echo "Unsupported platform: ${{ matrix.platform }}"; exit 1 ;;
           esac
           echo "Resolving Bootlin musl toolchain for arch=$BOOTLIN_ARCH (platform=${{ matrix.platform }})"
           TARBALL_BASE="https://toolchains.bootlin.com/downloads/releases/toolchains/$BOOTLIN_ARCH/tarballs/"
