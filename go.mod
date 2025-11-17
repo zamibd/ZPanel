@@ -19,6 +19,8 @@ require (
 	gorm.io/gorm v1.31.1
 )
 
+require github.com/boombuler/barcode v1.0.1-0.20190219062509-6c824513bacc // indirect
+
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/ajg/form v1.5.1 // indirect
@@ -98,6 +100,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/pierrec/lz4/v4 v4.1.21 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
+	github.com/pquerna/otp v1.4.0
 	github.com/prometheus-community/pro-bing v0.4.0 // indirect
 	github.com/quic-go/qpack v0.5.1 // indirect
 	github.com/quic-go/quic-go v0.55.0 // indirect
@@ -137,6 +140,7 @@ require (
 	github.com/x448/float16 v0.8.4 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	github.com/zeebo/blake3 v0.2.4 // indirect
+	go.uber.org/mock v0.5.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	go.uber.org/zap/exp v0.3.0 // indirect
