@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue"
+import { ref, computed } from "vue"
 import { useLocale,useTheme } from 'vuetify'
 import { i18n, languages } from '@/locales'
 import { useRouter } from 'vue-router'
