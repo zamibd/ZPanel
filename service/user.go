@@ -57,7 +57,8 @@ func (s *UserService) Login(username string, password string, passcode string, r
 	return user.Username, nil
 }
 
-func (s *UserService) CheckUser(username string, password string, passcode string, remoteIP string) *model.User {
+// CheckUserCredentials validates only username and password (for Step 1 of two-step login)
+func (s *UserService) CheckUserCredentials(username string, password string, remoteIP string) *model.User {
 	db := database.GetDB()
 
 	user := &model.User{}
@@ -68,17 +69,30 @@ func (s *UserService) CheckUser(username string, password string, passcode strin
 	if database.IsNotFound(err) {
 		return nil
 	} else if err != nil {
-		logger.Warning("check user err:", err, " IP: ", remoteIP)
+		logger.Warning("check user credentials err:", err, " IP: ", remoteIP)
 		return nil
 	}
 
+	return user
+}
+
+// CheckUser validates username, password, and 2FA code (for Step 2 of two-step login)
+func (s *UserService) CheckUser(username string, password string, passcode string, remoteIP string) *model.User {
+	// First check credentials
+	user := s.CheckUserCredentials(username, password, remoteIP)
+	if user == nil {
+		return nil
+	}
+
+	// Then check 2FA if enabled
 	if user.TOTPEnabled && !totp.Validate(passcode, user.TOTPSecret) {
 		logger.Warning("check err:", errors.New("Invalid 2FA code"), " IP: ", remoteIP)
 		return nil
 	}
 
+	db := database.GetDB()
 	lastLoginTxt := time.Now().Format("2006-01-02 15:04:05") + " " + remoteIP
-	err = db.Model(model.User{}).
+	err := db.Model(model.User{}).
 		Where("username = ?", username).
 		Update("last_logins", &lastLoginTxt).Error
 	if err != nil {

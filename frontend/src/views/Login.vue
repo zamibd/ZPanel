@@ -120,20 +120,34 @@ const submitStep1 = async () => {
   loading.value = true
   
   try {
-    // Send only username and password to verify credentials
+    // For Step 1, we need to check if credentials are correct
+    // Send with empty passcode - backend will accept if credentials are valid
+    // and user doesn't have 2FA enabled, OR will fail if credentials are wrong
     const response = await HttpUtil.post('api/login', {
       user: username.value,
       pass: password.value,
-      passcode: '' // Empty passcode for step 1
+      passcode: '000000' // Send dummy passcode for Step 1
     })
     
     if (response.success) {
-      // Move to step 2
-      step.value = 2
-      passcode.value = ''
+      // Credentials are valid and either no 2FA or 2FA already verified
       loading.value = false
+      setTimeout(() => {
+        router.push('/')
+      }, 500)
     } else {
-      loading.value = false
+      // Credentials might be wrong, or 2FA failed
+      // Try to determine if it's a credential error or 2FA error
+      const errorMsg = response.msg || ''
+      if (errorMsg.includes('wrong')) {
+        // Bad credentials
+        loading.value = false
+      } else {
+        // Might be 2FA related, move to step 2
+        step.value = 2
+        passcode.value = ''
+        loading.value = false
+      }
     }
   } catch (error) {
     loading.value = false
