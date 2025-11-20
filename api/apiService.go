@@ -10,6 +10,7 @@ import (
 	"github.com/zamibd/ZPanel/logger"
 	"github.com/zamibd/ZPanel/service"
 	"github.com/zamibd/ZPanel/util"
+	"github.com/zamibd/ZPanel/util/common"
 
 	"github.com/gin-gonic/gin"
 
@@ -264,25 +265,68 @@ func (a *ApiService) postActions(c *gin.Context) (string, json.RawMessage, error
 
 func (a *ApiService) Login(c *gin.Context) {
 	remoteIP := getRemoteIp(c)
-	loginUser, err := a.UserService.Login(c.Request.FormValue("user"), c.Request.FormValue("pass"), c.Request.FormValue("passcode"), remoteIP)
-	if err != nil {
-		jsonMsg(c, "", err)
+	username := c.Request.FormValue("user")
+	password := c.Request.FormValue("pass")
+	passcode := c.Request.FormValue("passcode")
+	step := c.Request.FormValue("step") // "1" for credentials only, "2" for credentials + 2FA
+
+	// Step 1: Only validate username and password
+	if step == "1" || step == "" {
+		user := a.UserService.CheckUserCredentials(username, password, remoteIP)
+		if user == nil {
+			jsonMsg(c, "", common.NewError("wrong user or password! IP: ", remoteIP))
+			return
+		}
+		// Return whether 2FA is required
+		if user.TOTPEnabled {
+			// User has 2FA enabled, need Step 2
+			jsonObj(c, map[string]interface{}{
+				"requires2FA": true,
+				"username":    user.Username,
+			}, nil)
+		} else {
+			// No 2FA, complete login now
+			sessionMaxAge, err := a.SettingService.GetSessionMaxAge()
+			if err != nil {
+				logger.Infof("Unable to get session's max age from DB")
+			}
+			err = SetLoginUser(c, user.Username, sessionMaxAge)
+			if err == nil {
+				logger.Info("user ", user.Username, " login success")
+				jsonMsg(c, "", nil)
+			} else {
+				logger.Warning("login failed: ", err)
+				jsonMsg(c, "", err)
+			}
+		}
 		return
 	}
 
-	sessionMaxAge, err := a.SettingService.GetSessionMaxAge()
-	if err != nil {
-		logger.Infof("Unable to get session's max age from DB")
+	// Step 2: Validate with 2FA passcode
+	if step == "2" {
+		loginUser, err := a.UserService.Login(username, password, passcode, remoteIP)
+		if err != nil {
+			jsonMsg(c, "", err)
+			return
+		}
+
+		sessionMaxAge, err := a.SettingService.GetSessionMaxAge()
+		if err != nil {
+			logger.Infof("Unable to get session's max age from DB")
+		}
+
+		err = SetLoginUser(c, loginUser, sessionMaxAge)
+		if err == nil {
+			logger.Info("user ", loginUser, " login success")
+		} else {
+			logger.Warning("login failed: ", err)
+		}
+
+		jsonMsg(c, "", nil)
+		return
 	}
 
-	err = SetLoginUser(c, loginUser, sessionMaxAge)
-	if err == nil {
-		logger.Info("user ", loginUser, " login success")
-	} else {
-		logger.Warning("login failed: ", err)
-	}
-
-	jsonMsg(c, "", nil)
+	jsonMsg(c, "", common.NewError("invalid login step"))
 }
 
 func (a *ApiService) ChangePass(c *gin.Context) {
