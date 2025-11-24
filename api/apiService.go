@@ -428,7 +428,7 @@ func (a *ApiService) DeleteToken(c *gin.Context) {
 
 func (a *ApiService) Prepare2FA(c *gin.Context) {
 	key, err := totp.Generate(totp.GenerateOpts{
-		Issuer:      "ZPanel Panel",
+		Issuer:      "S-UI Panel",
 		AccountName: GetLoginUser(c),
 	})
 	if err != nil {

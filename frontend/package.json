@@ -6,8 +6,7 @@
     "dev": "vite --host",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "eslint . --fix",
-    "lint:check": "eslint ."
+    "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "dependencies": {
     "@achrinza/node-ipc": "github:achrinza/node-ipc",
@@ -32,8 +31,6 @@
   "devDependencies": {
     "@babel/types": "^7.27.6",
     "@types/node": "^24.5.2",
-    "@typescript-eslint/eslint-plugin": "^8.48.0",
-    "@typescript-eslint/parser": "^8.48.0",
     "@vitejs/plugin-vue": "^6.0.1",
     "eslint-plugin-vue": "^10.5.0",
     "material-design-icons-iconfont": "^6.7.0",

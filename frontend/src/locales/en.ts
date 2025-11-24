@@ -52,7 +52,7 @@ export default {
     tls: "TLS Settings",
     basics: "Basics",
     dns: "DNS",
-    admins: "Admin",
+    admins: "Admins",
     settings: "Settings",
   },
   main: {
@@ -75,7 +75,7 @@ export default {
     },
     info: {
       sys: "Server Info",
-      sbd: "System Info",
+      sbd: "Core Info",
       host: "Host",
       cpu: "CPU",
       core: "Core",

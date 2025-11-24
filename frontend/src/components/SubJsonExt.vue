@@ -185,14 +185,14 @@ export default {
             "http_proxy": {
               "enabled": true,
               "server": "127.0.0.1",
-              "server_port": 2030
+              "server_port": 2080
             }
           }
         },
         {
           "type": "mixed",
           "listen": "127.0.0.1",
-          "listen_port": 2030,
+          "listen_port": 2080,
           "users": []
         }
       ],

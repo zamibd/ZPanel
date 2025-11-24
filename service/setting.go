@@ -44,7 +44,7 @@ var defaultConfig = `{
 var defaultValueMap = map[string]string{
 	"webListen":     "",
 	"webDomain":     "",
-	"webPort":       "2030",
+	"webPort":       "2080",
 	"secret":        common.Random(32),
 	"webCertFile":   "",
 	"webKeyFile":    "",
@@ -54,7 +54,7 @@ var defaultValueMap = map[string]string{
 	"trafficAge":    "30",
 	"timeLocation":  "Asia/Dhaka",
 	"subListen":     "",
-	"subPort":       "2040",
+	"subPort":       "2081",
 	"subPath":       "/customer/",
 	"subDomain":     "",
 	"subCertFile":   "",
