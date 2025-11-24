@@ -21,6 +21,13 @@ const RandomUtil = {
     }
     return str
   },
+  randomNumeric(count: number): string {
+    let str = ''
+    for (let i = 0; i < count; ++i) {
+        str += seq[this.randomInt(10)]
+    }
+    return str
+  },
   randomUUID(): string {
     let d = new Date().getTime()
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

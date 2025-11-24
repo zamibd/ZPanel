@@ -162,14 +162,14 @@ export default {
       this.loading = false
     },
     genByPattern(pattern: any[], order :number){
-      if (pattern.length == 0) return RandomUtil.randomSeq(8)
+      if (pattern.length == 0) return RandomUtil.randomNumeric(6)
       let result = ''
       pattern.forEach(p => {
         switch(typeof p){
           case 'object':
             switch(p.value){
               case "random":
-                result += RandomUtil.randomSeq(8)
+                result += RandomUtil.randomNumeric(6)
                 break
               case "order":
                 result += order+1
