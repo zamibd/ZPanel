@@ -56,7 +56,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/admin/api': {
-        target: 'http://localhost:2080',
+        target: 'http://localhost:2030',
         changeOrigin: true,
       },
     },

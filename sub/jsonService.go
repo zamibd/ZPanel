@@ -29,14 +29,14 @@ const defaultJson = `
         "http_proxy": {
           "enabled": true,
           "server": "127.0.0.1",
-          "server_port": 2080
+          "server_port": 2030
         }
       }
     },
     {
       "type": "mixed",
       "listen": "127.0.0.1",
-      "listen_port": 2080,
+      "listen_port": 2030,
       "users": []
     }
   ]

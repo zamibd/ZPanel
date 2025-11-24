@@ -22,7 +22,40 @@ permissions:
   actions: read
 
 jobs:
+  lint:
+    name: Lint Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          cache: false
+          go-version-file: go.mod
+
+      - name: Lint Frontend
+        run: |
+          cd frontend
+          npm ci
+          npm run lint:check
+
+      - name: Lint Backend
+        run: |
+          gofmt -l . | tee /tmp/gofmt.out
+          test -z "$(cat /tmp/gofmt.out)" || { echo "Please run 'go fmt' on the following files:"; cat /tmp/gofmt.out; exit 1; }
+          go vet ./api/... ./service/... ./cmd/... ./app/... ./config/... ./core/... ./cronjob/... ./database/... ./logger/... ./middleware/... ./network/... ./sub/... ./util/... ./web/...
+
   build-linux:
+    needs: lint
     strategy:
       matrix:
         platform:

@@ -1,0 +1,59 @@
+name: Lint
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  frontend-lint:
+    name: Frontend Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Run ESLint
+        run: |
+          cd frontend
+          npm run lint:check
+
+  backend-lint:
+    name: Backend Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Run go fmt
+        run: |
+          gofmt -l . | tee /tmp/gofmt.out
+          test -z "$(cat /tmp/gofmt.out)"
+
+      - name: Run go vet
+        run: go vet ./api/... ./service/... ./cmd/... ./app/... ./config/... ./core/... ./cronjob/... ./database/... ./logger/... ./middleware/... ./network/... ./sub/... ./util/... ./web/...
+
+      - name: Install staticcheck
+        run: go install honnef.co/go/tools/cmd/staticcheck@latest
+
+      - name: Run staticcheck
+        run: staticcheck ./api/... ./service/... ./cmd/... ./app/... ./config/... ./core/... ./cronjob/... ./database/... ./logger/... ./middleware/... ./network/... ./sub/... ./util/... ./web/...
