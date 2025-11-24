@@ -163,7 +163,7 @@ export function randomConfigs(user: string): Config {
 }
 
 export function createClient<T extends Client>(json?: Partial<T>): Client {
-  defaultClient.name = RandomUtil.randomNumeric(6)
+  defaultClient.name = RandomUtil.randomNumeric(10)
   const defaultObject: Client = { ...defaultClient, ...(json || {}) }
 
   // Add missing config

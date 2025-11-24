@@ -28,9 +28,9 @@
  
  
 ## Default Installation Information
-- Panel Port: 2080
+- Panel Port: 2030
 - Panel Path: /admin/
-- Subscription Port: 2081
+- Subscription Port: 2040
 - Subscription Path: /customer/
 - User :    admin
 - Password: admin

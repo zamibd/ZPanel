@@ -172,16 +172,16 @@ const oldSettings = ref({})
 const settings = ref({
 	webListen: "",
 	webDomain: "",
-	webPort: "2080",
+	webPort: "2030",
 	webCertFile: "",
 	webKeyFile: "",
   webPath: "/admin/",
   webURI: "",
 	sessionMaxAge: "0",
   trafficAge: "30",
-	timeLocation: "Asia/Tehran",
+	timeLocation: "Asia/Dhaka",
   subListen: "",
-	subPort: "2081",
+	subPort: "2040",
 	subPath: "/customer/",
 	subDomain: "",
 	subCertFile: "",
@@ -272,8 +272,8 @@ const subShowInfo = computed({
 })
 
 const webPort = computed({
-  get: () => { return settings.value.webPort.length>0 ? parseInt(settings.value.webPort) : 2080 },
-  set: (v:number) => { settings.value.webPort = v>0 ? v.toString() : "2080" }
+  get: () => { return settings.value.webPort.length>0 ? parseInt(settings.value.webPort) : 2030 },
+  set: (v:number) => { settings.value.webPort = v>0 ? v.toString() : "2030" }
 })
 
 const sessionMaxAge = computed({
@@ -287,8 +287,8 @@ const trafficAge = computed({
 })
 
 const subPort = computed({
-  get: () => { return settings.value.subPort.length>0 ? parseInt(settings.value.subPort) : 2081 },
-  set: (v:number) => { settings.value.subPort = v>0 ? v.toString() : "2081" }
+  get: () => { return settings.value.subPort.length>0 ? parseInt(settings.value.subPort) : 2040 },
+  set: (v:number) => { settings.value.subPort = v>0 ? v.toString() : "2040" }
 })
 
 const subUpdates = computed({
