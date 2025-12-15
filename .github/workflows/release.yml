@@ -100,7 +100,7 @@ jobs:
         run: tar -zcvf ZPanel-linux-${{ matrix.platform }}.tar.gz ZPanel
 
       - name: Upload files to Artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: ZPanel-linux-${{ matrix.platform }}
           path: ./ZPanel-linux-${{ matrix.platform }}.tar.gz
