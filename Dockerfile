@@ -44,7 +44,7 @@ RUN go test \
 # ── Build binary ───────────────────────────────
 RUN go build \
       -ldflags "-w -s" \
-      -tags "with_quic,with_grpc,with_utls,with_acme" \
+      -tags "with_quic,with_grpc,with_utls,with_acme,with_gvisor" \
       -o /app/zpanel \
       ./main.go \
     && echo "✅ Build succeeded"
