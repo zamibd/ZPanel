@@ -28,7 +28,6 @@ import (
 	"github.com/sagernet/sing-box/protocol/shadowtls"
 	"github.com/sagernet/sing-box/protocol/socks"
 	"github.com/sagernet/sing-box/protocol/ssh"
-	"github.com/sagernet/sing-box/protocol/tailscale"
 	"github.com/sagernet/sing-box/protocol/tor"
 	"github.com/sagernet/sing-box/protocol/trojan"
 	"github.com/sagernet/sing-box/protocol/tuic"
@@ -36,11 +35,9 @@ import (
 	"github.com/sagernet/sing-box/protocol/vless"
 	"github.com/sagernet/sing-box/protocol/vmess"
 	"github.com/sagernet/sing-box/protocol/wireguard"
-	"github.com/sagernet/sing-box/service/derp"
 	"github.com/sagernet/sing-box/service/resolved"
 	"github.com/sagernet/sing-box/service/ssmapi"
 	_ "github.com/sagernet/sing-box/transport/v2rayquic"
-	_ "github.com/sagernet/sing-dns/quic"
 )
 
 func InboundRegistry() *inbound.Registry {
@@ -95,7 +92,6 @@ func OutboundRegistry() *outbound.Registry {
 	hysteria.RegisterOutbound(registry)
 	tuic.RegisterOutbound(registry)
 	hysteria2.RegisterOutbound(registry)
-	wireguard.RegisterOutbound(registry)
 
 	return registry
 }
@@ -127,17 +123,6 @@ func DNSTransportRegistry() *dns.TransportRegistry {
 	return registry
 }
 
-func registerTailscaleEndpoint(registry *endpoint.Registry) {
-	tailscale.RegisterEndpoint(registry)
-}
-
-func registerTailscaleTransport(registry *dns.TransportRegistry) {
-	tailscale.RegistryTransport(registry)
-}
-
-func registerDERPService(registry *service.Registry) {
-	derp.Register(registry)
-}
 
 func registerQUICTransports(registry *dns.TransportRegistry) {
 	quic.RegisterTransport(registry)

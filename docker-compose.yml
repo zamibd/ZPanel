@@ -1,0 +1,27 @@
+services:
+  zpanel:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: zpanel
+    restart: unless-stopped
+    ports:
+      - "2030:2030" # Web UI
+      - "2040:2040" # Sub server
+      - "443:443" # HTTPS
+      - "8443:8443" # HTTPS
+      - "5443:5443" # HTTPS
+
+    volumes:
+      - zpanel_data:/app/data
+    environment:
+      - TZ=Asia/Dhaka
+    # Capabilities required by sing-box tun/wireguard (drop if not using TUN)
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+
+volumes:
+  zpanel_data:
+    driver: local

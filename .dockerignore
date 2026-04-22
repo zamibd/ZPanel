@@ -1,0 +1,38 @@
+# Version control
+.git
+.gitignore
+.github
+
+# Editor / OS artifacts
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Frontend dev artifacts (built in Docker, not needed in context)
+frontend/node_modules/
+frontend/dist/
+
+# Go build artifacts
+zpanel
+sui
+*.test
+*.out
+
+# Data / runtime files
+data/
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+*.log
+
+# Docker files themselves (avoid recursive context)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Test artifacts
+test-results.txt
