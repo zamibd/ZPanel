@@ -46,6 +46,8 @@ jobs:
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Build frontend
         run: |
@@ -53,13 +55,15 @@ jobs:
           npm install
           npm run build
           cd ..
-          mv frontend/dist web/html
+          mkdir -p web/html
+          mv frontend/dist/* web/html/
           rm -fr frontend
 
       - name: Setup Go dependencies
         run: |
-          go mod tidy
+          go mod edit -replace github.com/quic-go/qpack=github.com/quic-go/qpack@v0.5.1
           go mod download
+          go mod verify
 
       - name: Build ZPanel
         run: |
@@ -109,7 +113,6 @@ jobs:
       - name: Install GitHub CLI
         if: github.event_name == 'release' && github.event.action == 'published'
         run: |
-          # Install GitHub CLI on Ubuntu/Debian
           curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
           sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
           echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
