@@ -61,7 +61,9 @@ jobs:
 
       - name: Setup Go dependencies
         run: |
-          go mod edit -replace github.com/quic-go/qpack=github.com/quic-go/qpack@v0.5.1
+          go get github.com/sagernet/quic-go@v0.59.0-sing-box-mod.2
+          go get github.com/quic-go/qpack@v0.6.0
+          go mod tidy
           go mod download
           go mod verify
 
