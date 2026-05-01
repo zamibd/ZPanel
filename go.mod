@@ -11,7 +11,7 @@ require (
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/sagernet/sing v0.8.9
 	github.com/sagernet/sing-box v1.13.11
-	github.com/shirou/gopsutil/v4 v4.26.3
+	github.com/shirou/gopsutil/v4 v4.26.4
 	golang.zx2c4.com/wireguard/wgctrl v0.0.0-20241231184526-a9ab2273dd10
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/sqlite v1.6.0
